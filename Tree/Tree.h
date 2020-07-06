@@ -7,8 +7,8 @@
 using namespace std;
 
 class Tree {
-//private:
-public:
+private:
+//public:
    struct Node { // Inner class
       std::string _data;
       Node* _sibling, * _child;
@@ -35,7 +35,7 @@ public:
       bool operator!=(const Node& that) const;
    };
    Node* _root;
-//public:
+public:
    Tree() { _root = new Node("ROOT"); }
    ~Tree() { delete _root; _root = nullptr; }
    Tree(const Tree& that);
@@ -55,8 +55,8 @@ public:
 
    // comment out below
 
-   Node create_node(string str) {
-      return Node(str);
-   }
+   //Node create_node(string str) {
+   //   return Node(str);
+   //}
 
 };

@@ -7,27 +7,28 @@
 
 using namespace std;
 
-int main()
-{
-   Tree temp = Tree();
-   temp.make_special_config_1({ "AABA", "ABAB", "ABBA", "BABA", "COBO", "COCO", "CODO", "COFO", "COGO", "COHO", "COJO",
-"COKO", "DIBI", "DIDI", "DIFI", "DIGI", "DIHI", "DIJI", "DIKI", "DILI" });
-
-   Tree::Node temp_node = temp.create_node("test");
-   temp_node.insert_child(new Tree::Node("child"));
-   temp_node.insert_sibling(new Tree::Node("sib"));
-   temp_node.insert_sibling(new Tree::Node("sib2"));
-
-   Tree::Node new_node = temp_node;
-
-   Tree::Node diff_node = temp.create_node("diff");
-
-   cout << new_node.is_equal(&new_node, &diff_node);
-
-   cout << new_node.is_equal(&new_node, &temp_node);
-
-
-}
+//int main()
+//{
+//   Tree temp = Tree();
+////   temp.make_special_config_1({ "AABA", "ABAB", "ABBA", "BABA", "COBO", "COCO", "CODO", "COFO", "COGO", "COHO", "COJO",
+////"COKO", "DIBI", "DIDI", "DIFI", "DIGI", "DIHI", "DIJI", "DIKI", "DILI" });
+//
+//   temp._root->insert_child(new Tree::Node("child"));
+//   temp._root->insert_sibling(new Tree::Node("sib"));
+//   temp._root->_sibling->insert_sibling(new Tree::Node("sib2"));
+//
+//   Tree temp2 = temp;
+//
+//   //Tree::Node new_node = temp_node;
+//
+//   //Tree::Node diff_node = temp.create_node("diff");
+//
+//   //cout << new_node.is_equal(&new_node, &diff_node);
+//
+//   //cout << new_node.is_equal(&new_node, &temp_node);
+//
+//
+//}
 
 Tree::Node* Tree::Node::insert_sibling(Node* p) {
    if (_sibling == nullptr) {
@@ -56,7 +57,6 @@ Tree::Node* Tree::Node::insert_child(Node* p) {
 }
 
 const Tree::Node& Tree::Node::operator=(const Tree::Node& that) {
-   // TODO
    
    if (this != &that) {
       Node* temp = new Node(that.get_data());
@@ -95,6 +95,7 @@ bool Tree::Node::is_equal(const Node* p1, const Node* p2) {
 
 bool Tree::Node::operator==(const Node& that) const {
    bool result = true;
+
    if (this->_child == nullptr && that._child == nullptr && this->_sibling == nullptr && that._sibling == nullptr) {
       return true;
    }
@@ -111,9 +112,9 @@ bool Tree::Node::operator==(const Node& that) const {
       return false;
    }
    else {
-      result = (*this->_child == *that._child);
+      result = is_equal(this->_child, that._child);
       if (result) {
-         result = (*this->_sibling == *that._sibling);
+         result = is_equal(this->_sibling, that._sibling);
       }
    }
    return result;
@@ -153,9 +154,9 @@ Tree::Tree(const Tree& that) {
 }
 Tree& Tree::operator=(const Tree& that) {
    if (this != &that) {
-      Tree temp = Tree();
-      *temp._root = *that._root;
-      *this = temp;
+      Tree* temp = new Tree();
+      temp->_root = new Node(*that._root);
+      this->_root = temp->_root;
    }
    cout << "assign node";
    return *this;
