@@ -13,19 +13,42 @@ using namespace std;
 ////   temp.make_special_config_1({ "AABA", "ABAB", "ABBA", "BABA", "COBO", "COCO", "CODO", "COFO", "COGO", "COHO", "COJO",
 ////"COKO", "DIBI", "DIDI", "DIFI", "DIGI", "DIHI", "DIJI", "DIKI", "DILI" });
 //
-//   temp._root->insert_child(new Tree::Node("child"));
-//   temp._root->insert_sibling(new Tree::Node("sib"));
-//   temp._root->_sibling->insert_sibling(new Tree::Node("sib2"));
+//   temp._root->insert_child(new Tree::Node("menuw"))->insert_child(new Tree::Node("menu-child"));
+//   temp._root->insert_child(new Tree::Node("menuw-0"));
+//   //temp._root->insert_sibling(new Tree::Node("sib"));
+//   //temp._root->_sibling->insert_sibling(new Tree::Node("sib2"));
 //
-//   Tree temp2 = temp;
+//   Tree replacement = Tree();
 //
-//   //Tree::Node new_node = temp_node;
 //
-//   //Tree::Node diff_node = temp.create_node("diff");
 //
-//   //cout << new_node.is_equal(&new_node, &diff_node);
+//   replacement._root->insert_child(new Tree::Node("x"));
+//   replacement._root->insert_child(new Tree::Node("y"));
+//   *replacement._root->insert_child(new Tree::Node("z")) = *temp._root->_child;
 //
-//   //cout << new_node.is_equal(&new_node, &temp_node);
+//   Tree replacement2 = Tree(replacement);
+//
+//   Tree new_new = Tree();
+//
+//   new_new = replacement;
+//
+//   temp = temp;
+//
+//   temp = Tree(temp);
+//
+//   temp = Tree();
+//
+//   temp = replacement;
+//
+//   replacement = Tree(temp);
+//
+//   Tree dup = Tree();
+//
+//   dup._root->insert_child(new Tree::Node("menuw"));
+//   dup._root->insert_child(new Tree::Node("menuw-0"));
+//   dup._root->insert_child(new Tree::Node("menuw-1"));
+//
+//   cout << (dup != temp) << endl;
 //
 //
 //}
@@ -38,8 +61,6 @@ Tree::Node* Tree::Node::insert_sibling(Node* p) {
 
    this->_sibling->insert_sibling(p);
 
-   cout << "insert sibling";
-
    return p;
 }
 
@@ -51,31 +72,25 @@ Tree::Node* Tree::Node::insert_child(Node* p) {
 
    this->_child->insert_sibling(p);
 
-   cout << "insert child";
-
    return p;
 }
 
 const Tree::Node& Tree::Node::operator=(const Tree::Node& that) {
-   
+
    if (this != &that) {
-      Node* temp = new Node(that.get_data());
       if (that._child == nullptr) {
-         temp->_child = nullptr;
+         this->_child = nullptr;
       }
       else {
-         temp->_child = new Node(*that._child);
+         this->_child = new Node(*that._child);
       }
       if (that._sibling == nullptr) {
-         temp->_sibling = nullptr;
+         this->_sibling = nullptr;
       }else {
-         temp->_sibling = new Node(*that._sibling);
+         this->_sibling = new Node(*that._sibling);
       }
-      this->set_data(temp->get_data());
-      this->_child = temp->_child;
-      this->_sibling = temp->_sibling;
+      this->set_data(that.get_data());
    }
-   cout << "assign node";
    return *this;
 }
 
@@ -121,7 +136,7 @@ bool Tree::Node::operator==(const Node& that) const {
 }
 
 bool Tree::Node::operator!=(const Node& that) const {
-   return (!(this == &that));
+   return (!(*this == that));
 }
 
 string Tree::Node::to_string() const {
@@ -150,15 +165,21 @@ string Tree::Node::to_string() const {
 }
 
 Tree::Tree(const Tree& that) {
+   this->_root = new Node("ROOT");
    *this = that;
 }
 Tree& Tree::operator=(const Tree& that) {
+   // Check to see if recipiient tree already has data and if it does, delete the data. This may be where the memory leak is occurring
+
    if (this != &that) {
-      Tree* temp = new Tree();
-      temp->_root = new Node(*that._root);
-      this->_root = temp->_root;
+
+      if (this->_root != NULL) {
+         delete this->_root;
+         this->_root = NULL;
+      }
+
+      this->_root = new Node(*that._root);
    }
-   cout << "assign node";
    return *this;
 }
 

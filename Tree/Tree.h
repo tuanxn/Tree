@@ -8,7 +8,11 @@ using namespace std;
 
 class Tree {
 private:
+
+   //comment out
 //public:
+
+   //comment end
    struct Node { // Inner class
       std::string _data;
       Node* _sibling, * _child;
@@ -46,7 +50,7 @@ public:
       return this->_root->is_equal(_root, that._root);
    }
    bool operator!=(const Tree& that) const {
-      return (!(this == &that));
+      return (!(*this == that));
    }
    friend std::ostream& operator<<(std::ostream& os, const Tree& tree) {
       return os; // TODO
